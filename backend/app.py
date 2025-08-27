@@ -24,7 +24,8 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 print("🔑 OPENAI_API_KEY present?", bool(OPENAI_API_KEY))
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "*"}})
+CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
+
 
 oai_client = OpenAI(api_key=OPENAI_API_KEY) if OPENAI_API_KEY else None
 
@@ -262,6 +263,13 @@ def chat():
 @app.get("/health")
 def health():
     return jsonify({"status": "ok"})
+
+@app.after_request
+def add_cors_headers(response):
+    response.headers["Access-Control-Allow-Origin"] = "*"
+    response.headers["Access-Control-Allow-Headers"] = "Content-Type,Authorization"
+    response.headers["Access-Control-Allow-Methods"] = "GET,POST,OPTIONS"
+    return response
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5001)))

@@ -1,0 +1,16 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtualenv
+venv/
+
+# App data
+uploads/
+
+# Secrets & local stuff
+.env
+*.log
+.DS_Store
